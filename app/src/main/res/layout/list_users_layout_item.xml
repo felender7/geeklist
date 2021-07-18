@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,8 +6,8 @@
     android:padding="10dp">
 
     <ImageView
-       android:id="@+id/imageIcon"
-        android:src="@drawable/ic_baseline_account_circle_24"
+        android:id="@+id/imageIcon"
+        android:src="@drawable/ic_profile"
         android:layout_width="45dp"
         android:layout_height="45dp"
         />
@@ -18,17 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-    <TextView
-        android:text="MTN User"
-        android:textColor="@color/black"
-        android:id="@+id/tvUserName"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="16sp"
+        <TextView
+            android:text="MTN User"
+            android:textColor="@color/black"
+            android:id="@+id/tvUserName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
 
-        />
+            />
 
-</LinearLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

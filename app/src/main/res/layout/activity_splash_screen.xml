@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/whiteSmoke"
     tools:context=".SplashScreenActivity">
 
     <ImageView
@@ -17,11 +18,12 @@
 
     <TextView
         android:id="@+id/app_name"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/image_logo"
         android:text="GeekList"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         android:layout_marginTop="10dp"
         />

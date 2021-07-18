@@ -1,35 +1,47 @@
-package co.za.theappbrewery.phonebooktest
+package co.za.theappbrewery.geeklist
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
-import android.content.Intent.ACTION_SEND
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import co.za.theappbrewery.phonebooktest.core.model.User
+import co.za.theappbrewery.geeklist.core.model.User
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-
 class UserDetailsActivity : AppCompatActivity() {
 
     private val REQUEST_CODE = 100
 
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_GeekList)
         setContentView(R.layout.activity_user_details)
+
+        //actionbar
+        val actionbar = supportActionBar
+
+        //set actionbar title
+        "<Geek/>".also { actionbar!!.title = it }
+
+        //set back button
+        actionbar?.setDisplayHomeAsUpEnabled(true)
+        actionbar?.setDisplayHomeAsUpEnabled(true)
 
         // write permission to access the storage
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
@@ -67,6 +79,8 @@ class UserDetailsActivity : AppCompatActivity() {
         val userRole = findViewById<TextView>(R.id.userRole)
         val imageView = findViewById<ImageView>(R.id.imageView)
         val imTakePicture = findViewById<ImageButton>(R.id.imTakePicture)
+        val btnCall = findViewById<ImageView>(R.id.btnCall)
+
 
         val user = intent.getParcelableExtra<User>("User")
 
@@ -75,25 +89,38 @@ class UserDetailsActivity : AppCompatActivity() {
         userRole.text = user?.roleName
         Picasso.get().load(user?.profileUrl).into(imageView)
 
-      // take picture
+
+        // Make a call
+       btnCall.setOnClickListener{
+            val telephoneSchema = "tel:"
+            val phoneNumber = user?.phone
+            val phoneCallUri = Uri.parse(telephoneSchema + phoneNumber)
+            val phoneCallIntent = Intent(Intent.ACTION_DIAL).also{ it.data = phoneCallUri }
+            startActivity(phoneCallIntent)
+       }
+
+        // take picture
         imTakePicture.setOnClickListener(){
-           this.capturePhoto()
+            this.capturePhoto()
         }
 
-
-     //Share button
+        //Share button
         val btnShare = findViewById<ImageButton>(R.id.btnShare)
 
         btnShare.setOnClickListener {
-             if (user != null) this.shareProfile(user)
-            }
+            if (user != null) this.shareProfile(user)
+        }
+
     }
 
     //function to share user profile name
     private fun shareProfile (user: User) {
         val sendIntent: Intent = Intent().apply {
-            action = ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, user.name)
+            action = Intent.ACTION_SEND
+            val name = user.name
+            val phone = user.phone
+            val shareDetails ="$name, $phone"
+            putExtra(Intent.EXTRA_TEXT, shareDetails)
             type = "text/plain"
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
@@ -101,8 +128,8 @@ class UserDetailsActivity : AppCompatActivity() {
     }
 
 
-    //Capture Photo
 
+    //Capture Photo
     private fun capturePhoto(){
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(cameraIntent,REQUEST_CODE)
@@ -171,4 +198,22 @@ class UserDetailsActivity : AppCompatActivity() {
             Toast.makeText(this , "Captured View and saved to Gallery" , Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    //Display image after Capture
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE && data != null){
+            val imageView = findViewById<ImageView>(R.id.imageView)
+            imageView.setImageBitmap(data.extras?.get("data") as Bitmap)
+        }
+    }
+
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+
 }
