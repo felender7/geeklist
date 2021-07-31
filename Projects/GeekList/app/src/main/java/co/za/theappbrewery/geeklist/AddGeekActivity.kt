@@ -1,11 +1,10 @@
 package co.za.theappbrewery.geeklist
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
 import android.widget.Button
-import co.za.theappbrewery.geeklist.core.model.User
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
 
@@ -42,23 +41,31 @@ class AddGeekActivity : AppCompatActivity() {
             val phone = etPhone.editText?.text.toString()
             val role = etRole.editText?.text.toString()
             val profileUrl = etProfileUrl.editText?.text.toString()
-            val user = User(
-                name,
-                phone,
-                role,
-                profileUrl
-            )
-
-            Intent(this, MainActivity::class.java).also {
-                it.putExtra("EXTRA_PERSON", user)
-                startActivity(it)
-
+            when {
+                name.isEmpty() -> {
+                    Toast.makeText(this, "Please enter your name", Toast.LENGTH_LONG).show()
+                }
+                phone.isEmpty() -> {
+                        Toast.makeText(this, "Please enter your phone number ", Toast.LENGTH_LONG).show()
+                }
+                role.isEmpty() ->{
+                        Toast.makeText(this, "Please enter your role ", Toast.LENGTH_LONG).show()
+                }
+                
+                else -> {
+                    Intent(this,MainActivity::class.java).also {
+                        it.putExtra("Name", name)
+                        it.putExtra("Phone", phone)
+                        it.putExtra("Role", role)
+                        it.putExtra("ProfileUrl", profileUrl)
+                        startActivity(it)
+                        finish()
+                    }
+                    Toast.makeText(this, "Saved Successfully", Toast.LENGTH_SHORT).show()
+                }
             }
-
-        }
-
-
     }
+   }
 
 
     override fun onSupportNavigateUp(): Boolean {

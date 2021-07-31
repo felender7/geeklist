@@ -3,10 +3,12 @@ package co.za.theappbrewery.geeklist.core.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import co.za.theappbrewery.geeklist.R
 import co.za.theappbrewery.geeklist.core.model.User
+import com.squareup.picasso.Picasso
 
 class UserAdapter(val users: ArrayList<User>) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
@@ -40,7 +42,9 @@ class UserAdapter(val users: ArrayList<User>) : RecyclerView.Adapter<UserAdapter
 
         fun bindItems(user: User) {
             val textViewName = itemView.findViewById(R.id.tvUserName) as TextView
+            val profileImage = itemView.findViewById<ImageView>(R.id.imageIcon) as ImageView
             textViewName.text = user.name
+            Picasso.get().load(user?.profileUrl).into(profileImage)
 
         }
     }
